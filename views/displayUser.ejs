@@ -1,0 +1,121 @@
+<%- include("./header") %>
+
+<table class="table users__table" id="myTable">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Address</th>
+      <th scope="col">Phone Number</th>
+      <th scope="col">Age</th>
+      <th scope="col">Gender</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% allUsers.forEach(function(user, index) { %>
+    <tr>
+      <th scope="row"><p><%= index+1 %></p></th>
+      <td><p><%= user.username %></p></td>
+      <td><p><%= user.email %></p></td>
+      <td><p><%= user.address %></p></td>
+      <td><p><%= user.phone %></p></td>
+      <td><p><%= user.age %></p></td>
+      <td><p><%= user.gender %></p></td>
+      <td>
+        <a href="/users/<%= user._id %>/edit/" id="edit--form">
+          <button class="btn btn-warning">Edit</button>
+        </a>
+      </td>
+      <td>
+        <form
+          action="/users/<%= user._id %>?_method=delete"
+          method="post"
+          id="form--delete"
+        >
+          <button class="btn btn-danger" id="delete--btn">Delete</button>
+        </form>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<div id="myModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">User Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Modal content.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-primary">
+          close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    let a;
+    $("#myTable tbody tr").click(function () {
+      var rowData = $(this)
+        .children("td")
+        .map(function () {
+          return $(this).text();
+        })
+        .get();
+
+      a = rowData[1];
+
+      $("#myModal .modal-body").html(
+        "<p> <span class='modal__data'>username: </span>" +
+          rowData[0] +
+          "</p>" +
+          "<p> <span class='modal__data'>email: </span>" +
+          rowData[1] +
+          "</p>" +
+          "<p> <span class='modal__data'>address: </span>" +
+          rowData[2] +
+          "</p>" +
+          "<p> <span class='modal__data'>phone: </span>" +
+          rowData[3] +
+          "</p>" +
+          "<p> <span class='modal__data'>age: </span>" +
+          rowData[4] +
+          "</p>" +
+          "<p> <span class='modal__data'>gender: </span>" +
+          rowData[5] +
+          "</p>"
+      );
+      // Display the modal
+      $("#myModal").modal("show");
+    });
+
+    // delete form
+    document
+      .querySelector("#form--delete")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+    document
+      .querySelector("#edit--form")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+  });
+</script>
+
+<%- include("./footer") %>
